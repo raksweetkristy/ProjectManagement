@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+
+  open-project:
+    image: openproject/community:12
+    container_name: openproject
+    environment:
+      OPENPROJECT_SECRET_KEY_BASE: secret
+      OPENPROJECT_HOST__NAME: ${HOST__NAME}
+      OPENPROJECT_HTTPS: 'true'
+      DATABASE_URL: ${DATABASE_URL}
+
+      OPENPROJECT_ATTACHMENTS__STORAGE: fog
+      OPENPROJECT_FOG_CREDENTIALS_AWS__ACCESS__KEY__ID: ${AWS_ACCESS_KEY_ID}
+      OPENPROJECT_FOG_CREDENTIALS_AWS__SECRET__ACCESS__KEY: ${AWS_SECRET_ACESS_KEY}
+      OPENPROJECT_FOG_CREDENTIALS_PROVIDER: AWS
+      OPENPROJECT_FOG_CREDENTIALS_REGION: ${AWS_REGION}
+      OPENPROJECT_FOG_DIRECTORY: ${AWS_BUCKET_NAME}
+    ports:
+      - '${APP_PORT}:80'
+    env_file:
+      - .env
+    volumes:
+      - /var/lib/openproject/pgdata:/var/openproject/pgdata
+      - /var/lib/openproject/assets:/var/openproject/assets
